@@ -76,3 +76,32 @@ end
 def correct_matches(user_input,code) 
   [correct_match_counter(user_input, code), correct_color_counter(user_input, code)]
 end
+
+def print_board(tries)
+  tries.each_with_index do |try, index|
+    
+    puts "#{double_digit_index(index)}|#{try[0][0]}|#{try[0][1]}|#{try[0][2]}|#{try[0][3]}| 
+     #{print_x_o(try[1])}"
+    
+    end
+end
+
+def double_digit_index(index)
+  if index < 9
+    return "#{index + 1}. "
+  else
+    "#{index + 1}. "
+  end 
+end
+
+def print_x_o(x_o_array)
+  return_value = '' 
+  x_o_array[0].times do
+    return_value += 'x'
+  end
+  return_value += ' ' 
+  (x_o_array[1] - x_o_array[0]).times do
+    return_value += 'o'
+  end
+  return_value
+end
