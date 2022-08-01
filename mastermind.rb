@@ -5,6 +5,7 @@ class Game
   def initialize()
     @code = COLORS.shuffle[0..3]
     @tries = []
+    @win = false
   end
 
   def play; 
@@ -21,7 +22,12 @@ class Game
   end
   
 
-  
+def user_guess_method
+  user_guess = []
+  user_guess << get_users_input
+  user_guess << correct_matches(user_guess[0],@code)
+  @tries << user_guess
+end
 
 
 def get_users_input
@@ -33,6 +39,7 @@ def get_users_input
   end
   user_input
 end
+
 
 def validate_user_input(user_input)
   compare = initials
@@ -64,4 +71,8 @@ def correct_match_counter(user_input, code)
      counter+=1 if element == code[index]
   end
   counter
+end
+
+def correct_matches(user_input,code) 
+  [correct_match_counter(user_input, code), correct_color_counter(user_input, code)]
 end
