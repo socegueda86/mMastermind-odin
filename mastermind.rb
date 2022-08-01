@@ -3,7 +3,7 @@ class Game
   
 
   def initialize()
-    @code = COLORS.shuffle[0..3]
+    @code = COLORS.map {|element| element[0]}.shuffle[0..3]
     @tries = []
     @win = false
   end
@@ -17,7 +17,7 @@ class Game
      # @tries << 
      #win?
      #print board
-   #end of loop
+   #end of loopus
   
   end
   
