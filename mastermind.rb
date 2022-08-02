@@ -4,7 +4,7 @@ class Game
   def initialize()
     @codemaker = computer_or_user == 1 ? :computer : :human
 
-    @code = COLORS.map { |element| element[0] }.sample(4)  ## ill change this to get it direct from Player Class
+    @code = @code = 4.times.map{ COLORS.map { |element| element[0] }.sample}     ## I'll change this to get it direct from Player Class
     @tries = []
     @win = false
   end
