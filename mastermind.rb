@@ -2,9 +2,25 @@ class Game
   COLORS = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]
 
   def initialize()
-    @code = COLORS.map { |element| element[0] }.sample(4)
+    @codemaker = computer_or_user == 1 ? :computer : :human
+
+    @code = COLORS.map { |element| element[0] }.sample(4)  ## ill change this to get it direct from Player Class
     @tries = []
     @win = false
+  end
+
+  def computer_or_user
+    answer = 0
+    loop do 
+    puts "Indicate if the codemaker will be the computer or the user"
+    puts "Press 1 for Computer"
+    puts "Press 2 for User"
+    puts "Press CTRL + C to exit"
+    answer = gets.to_i
+    break if answer == 1 || answer == 2
+    puts "Invalid option"
+    end
+    answer
   end
 
   def play
