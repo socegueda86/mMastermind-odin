@@ -49,7 +49,7 @@ class Game
   end
 
   def validate_user_input(user_input)
-    compare = initials
+    compare = COLORS.map { |element| element[0] }.join
     unless user_input.length != 4
       # next line uses .include to check if the initial of the each color is in COLORS initials,
       # Then its cheks if all comply with this condition (that the 4 values are valid values).
@@ -60,9 +60,6 @@ class Game
     false
   end
 
-  def initials
-    COLORS.map { |element| element[0] }.join
-  end
 
   def correct_color_counter(user_input, code)
     counter = 0
