@@ -104,3 +104,9 @@ end
 
 a = Game.new
 a.play
+
+Class Player < Game
+
+Class Human < Player 
+
+Class Computer < Player 
