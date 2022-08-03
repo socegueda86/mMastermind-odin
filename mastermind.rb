@@ -25,30 +25,30 @@ class Game
 
   def play
     loop do
-      user_guess_method
+      guess
       print_board(@tries)
       break if @win == true || @tries.length >= 12
     end
   end
 
-  def user_guess_method
+  def guess  ##user
     user_guess = []
-    user_guess << get_users_input
-    user_guess << correct_matches(user_guess[0],@code)
+    user_guess << get_input
+    user_guess << correct_matches(user_guess[0],  @code)
     @tries << user_guess
   end
 
-  def get_users_input
+  def get_input  ####user
     while true
       puts "\nInput your selection by indicating the initial letter of the color separated by a dash. i.e.:\n\n'Red-Blue-Yellow-Green' would be --> 'R-B-Y-G'\n\n"
       user_input = gets.chomp.upcase
       user_input = user_input.split("-") 
-      break if validate_user_input(user_input) 
+      break if validate_input(user_input) 
     end
     user_input
   end
 
-  def validate_user_input(user_input)
+  def validate_input(user_input)  ##user
     compare = COLORS.map { |element| element[0] }.join
     unless user_input.length != 4
       # next line uses .include to check if the initial of the each color is in COLORS initials,
@@ -60,13 +60,14 @@ class Game
     false
   end
 
-
   def correct_color_counter(user_input, code)
     counter = 0
-    user_input.uniq.each do |i|
-      counter += code.select { |j| j == i }.count
+    user_input.uniq.each do |element|
+      if code.any? { |element2| element2 == element}
+        counter += [user_input.select{ |i| i == element}.count, code.select { |i| i == element}.count].min
+      end
     end
-    counter
+      counter
   end
 
   def correct_match_counter(user_input, code)
@@ -78,7 +79,7 @@ class Game
     counter
   end
 
-  def correct_matches(user_input,code) 
+  def correct_matches(user_input, code) 
     [correct_match_counter(user_input, code), correct_color_counter(user_input, code)]
   end
 
