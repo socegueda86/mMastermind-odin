@@ -174,3 +174,4 @@ end
 a = Game.new
 a.play
 
+  
