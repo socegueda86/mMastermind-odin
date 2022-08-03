@@ -130,22 +130,31 @@ class HumanCodeMaker < Game
   attr_reader :code, :guess
   def initialize(game)
     @game = game
-    @code = 4.times.map{ COLORS.map { |element| element[0] }.sample}     
+    @code = get_code_from_user
+    @hash_for_algorithm = {}
   end
 
   def guess  ##user
-    user_guess = []
-    user_guess << get_input
-    user_guess << @game.correct_matches(user_guess[0])
-    @game.tries << user_guess
+    computer_guess = []
+    computer_guess << get_computers_input 
+    computer_guess << @game.correct_matches(user_guess[0])
+    @game.tries << computer_guess
+
+    ### here it goes the algorithm
   end
-  
-  def get_input  ####user
-    while true
-      puts "\nInput your selection by indicating the initial letter of the color separated by a dash. i.e.:\n\n'Red-Blue-Yellow-Green' would be --> 'R-B-Y-G'\n\n"
+   
+  def get_code_from_user
+    user_input = nil
+    loop do
+      puts "\n\nInput the color code using the intial of the colors separated by a dash"
+      puts "The available colors are 'Red, Blue, Yellow, Green, Purple, Orange'."
+      puts "i.e. If you want your color to be 'Red Blue Yellow Green' then you should"
+      puts "input the secuence as follows: R-B-Y-G"
+      puts "Input your code: "
       user_input = gets.chomp.upcase
       user_input = user_input.split("-") 
       break if validate_input(user_input) 
+      puts "Invalid input, please try again or press CTRL + C to exit.\n\n"
     end
     user_input
   end
@@ -156,17 +165,36 @@ class HumanCodeMaker < Game
       # next line uses .include to check if the initial of the each color is in COLORS initials,
       # Then its cheks if all comply with this condition (that the 4 values are valid values).
       if user_input.map { |color| compare.include?(color) }.all? { |value| value == true }
-      return true
+        return true
       end
     end
     false
   end 
+  ###
 
   def winner
     puts "\n\n ##### Congrats You,ve won! #####\n" if @game.win == false
     @game.win = true
     
   end
+
+  def get_computers_input
+    unless @try.count > 5 
+      return only_initials_input
+    end
+
+ 
+  end
+
+  def only_initials_input
+    returned_array = []
+    4.times do
+      returned_array.push(initials[@try.count])
+    end
+    returned_array
+  end
+
+
 end
 
 
