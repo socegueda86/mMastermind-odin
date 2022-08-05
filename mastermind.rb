@@ -28,6 +28,7 @@ class Game
     loop do
       @codemaker.guess
       print_board(@tries)
+      puts "#############################################"
       break if @win == true || @tries.length >= 12
     end
   end
@@ -125,22 +126,24 @@ class ComputerCodeMaker < Game
   end
 end
 
+
 class HumanCodeMaker < Game 
 
   attr_reader :code, :guess
   def initialize(game)
     @game = game
     @code = get_code_from_user
-    @hash_for_algorithm = {}
+    @positional_hash_of_arrays = {}
   end
 
-  def guess  ##user
+  def guess
     computer_guess = []
-    computer_guess << get_computers_input 
-    computer_guess << @game.correct_matches(user_guess[0])
+    computer_guess << get_computers_input
+    computer_guess << @game.correct_matches(computer_guess[0])
+    if sum_of_x_in_repeated_intials_attemps(@positional_hash_of_arrays) < 4
+      positional_hash_creator(computer_guess)  
+    end
     @game.tries << computer_guess
-
-    ### here it goes the algorithm
   end
    
   def get_code_from_user
@@ -170,36 +173,58 @@ class HumanCodeMaker < Game
     end
     false
   end 
-  ###
 
   def winner
-    puts "\n\n ##### Congrats You,ve won! #####\n" if @game.win == false
+    puts "\n\n ##### Computer won! #####\n" if @game.win == false
     @game.win = true
-    
   end
 
   def get_computers_input
-    unless @try.count > 5 
+    if @game.tries.count < 5 && sum_of_x_in_repeated_intials_attemps(@positional_hash_of_arrays) < 4
+      p sum_of_x_in_repeated_intials_attemps(@positional_hash_of_arrays) 
       return only_initials_input
     end
-
+    COLORS.map{ |color| color[0] }.sample(4)  ##### easy mode
+  end  
  
-  end
-
   def only_initials_input
     returned_array = []
     4.times do
-      returned_array.push(initials[@try.count])
+      returned_array.push(initials(@game.tries.count))
     end
     returned_array
   end
 
+  def initials(index)
+    COLORS[index][0]
+  end
 
+  def positional_hash_creator (computer_guess)  ##debug
+    #the next 'unless' is to assure the array only consist of values that are present in the code
+    unless @game.tries.count > 4 ### when tries.count == 4 we are on the 5th play
+      unless computer_guess[1][0] == 0
+        @positional_hash_of_arrays[computer_guess[0][0]] = [[1,2,3,4],[computer_guess[1][0]]]
+      end
+      return
+    end
+    @positional_hash_of_arrays[COLORS[-1][0]] = [[1,2,3,4], [4 - sum_of_x_in_repeated_intials_attemps(@positional_hash_of_arrays)]] 
+  end
+  
+
+  def sum_of_x_in_repeated_intials_attemps(positional_hash_of_arrays)
+    positional_hash_of_arrays.reduce(0) do |sum, value|
+      sum += value[1][1][0]
+      sum
+     end
+  end
 end
 
 
 
 a = Game.new
+
 a.play
+
+
 
   
